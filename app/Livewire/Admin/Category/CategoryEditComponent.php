@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Category;
 use App\Models\Category;
 use App\Models\FilterGroup;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -39,11 +40,34 @@ class CategoryEditComponent extends Component
         $validated = $this->validate([
             'title' => 'required|max:255',
             'parent_id' => 'required|integer',
+            'selectedCategoryFilters.*' => 'numeric',
         ]);
-        $this->category->update($validated);
-        cache()->forget('categories_html');
-        session()->flash('success', 'Category updated successfully.');
-        $this->redirectRoute('admin.categories.index', navigate: true);
+
+        try {
+            DB::beginTransaction();
+            $this->category->update($validated);
+            DB::table('category_filters')
+                ->where('category_id', '=', $this->category->id)
+                ->delete();
+            if (!empty($validated['selectedCategoryFilters'])) {
+                $data = [];
+                foreach ($validated['selectedCategoryFilters'] as $filterId) {
+                    $data[] = [
+                        'category_id' => $this->category->id,
+                        'filter_group_id' => $filterId,
+                    ];
+                }
+                DB::table('category_filters')->insert($data);
+            }
+            DB::commit();
+            cache()->forget('categories_html');
+            session()->flash('success', 'Category updated successfully.');
+            $this->redirectRoute('admin.categories.index', navigate: true);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            $this->js("toastr.error('Error updating category!')");
+        }
     }
 
     public function render()
