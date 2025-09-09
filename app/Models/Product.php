@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -9,6 +10,10 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Product extends Model
 {
+    use Sluggable;
+
+    public $fillable = ['title', 'category_id', 'excerpt', 'content', 'price', 'old_price', 'image', 'gallery',
+        'is_hit', 'is_new'];
 
     protected function gallery(): Attribute
     {
@@ -20,11 +25,22 @@ class Product extends Model
 
     public function getImage()
     {
-        return $this->image ?: 'assets/img/no-image.png';
+        return $this->image
+            ? asset($this->image)
+            : asset('assets/img/no-image.png');
     }
 
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
     }
 }

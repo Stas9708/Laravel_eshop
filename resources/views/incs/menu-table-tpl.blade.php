@@ -9,7 +9,7 @@
             <i class="fa-solid fa-pencil"></i>
         </a>
         <button class="btn btn-danger btn-circle" wire:click="deleteCategory({{ $item['id'] }})"
-                wire:confirm="Are you sure?">
+                wire:confirm="Are you sure?" wire:loading.attr="disabled">
             <i class="fa-solid fa-trash"></i>
         </button>
     </td>

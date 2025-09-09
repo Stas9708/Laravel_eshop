@@ -196,29 +196,3 @@
         toastr.success('{{ session('success') }}')
     </script>
 @endif
-
-@script
-<script>
-    $(function () {
-
-        $(".owl-carousel-full").owlCarousel({
-            margin: 20,
-            responsive: {
-                0: {
-                    items: 1
-                },
-                500: {
-                    items: 2
-                },
-                700: {
-                    items: 3
-                },
-                1000: {
-                    items: 4
-                }
-            }
-        });
-
-    });
-</script>
-@endscript
