@@ -70,6 +70,19 @@
                 <i class="fa-solid fa-shirt"></i>
                 <span>Products</span></a>
         </li>
+        <hr class="sidebar-divider">
+        <li class="nav-item active">
+            <a class="nav-link" href="{{ route('admin.filter-groups.index') }}" wire:navigate>
+                <i class="fa-solid fa-filter"></i>
+                <span>Filter groups</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="{{ route('admin.filters.index') }}" wire:navigate>
+                <i class="fa-solid fa-filter"></i>
+                <span>Filters list</span></a>
+        </li>
+        <hr class="sidebar-divider">
+
 
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">

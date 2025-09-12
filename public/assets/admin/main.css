@@ -65,3 +65,13 @@ label.required::before {
     text-align: center;
     padding-top: 20px;
 }
+
+.media-copied {
+    position: fixed;
+    background: #e9ffd9;
+    color: #498048;
+    padding: 20px 30px;
+    right: 20px;
+    top: 20px;
+}
+

@@ -42,4 +42,19 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         ->name('admin.products.create');
     Route::get('/products/{product}/edit', \App\Livewire\Admin\Product\ProductEditComponent::class)
         ->name('admin.products.edit');
+
+    Route::get('/filter-groups', \App\Livewire\Admin\Filter\FilterGroupIndexComponent::class)
+        ->name('admin.filter-groups.index');
+    Route::get('/filter-groups/create', \App\Livewire\Admin\Filter\FilterGroupCreateComponent::class)
+        ->name('admin.filter-groups.create');
+    Route::get('/filter-groups/{filterGroup}/edit',
+        \App\Livewire\Admin\Filter\FilterGroupEditComponent::class)
+        ->name('admin.filter-groups.edit');
+
+    Route::get('/filters', \App\Livewire\Admin\Filter\FilterIndexComponent::class)
+        ->name('admin.filters.index');
+    Route::get('/filters/create', \App\Livewire\Admin\Filter\FilterCreateComponent::class)
+        ->name('admin.filters.create');
+    Route::get('/filters/{filter}/edit', \App\Livewire\Admin\Filter\FilterEditComponent::class)
+        ->name('admin.filters.edit');
 });
