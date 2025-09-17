@@ -57,4 +57,9 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         ->name('admin.filters.create');
     Route::get('/filters/{filter}/edit', \App\Livewire\Admin\Filter\FilterEditComponent::class)
         ->name('admin.filters.edit');
+
+    Route::get('/orders', \App\Livewire\Admin\Order\OrderIndexComponent::class)
+        ->name('admin.orders.index');
+    Route::get('/orders/{order}/edit', \App\Livewire\Admin\Order\OrderEditComponent::class)
+        ->name('admin.orders.edit');
 });

@@ -81,6 +81,11 @@
                 <i class="fa-solid fa-filter"></i>
                 <span>Filters list</span></a>
         </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="{{ route('admin.orders.index') }}" wire:navigate>
+                <i class="fa-solid fa-list-ol fa-2x"></i>
+                <span>Order list</span></a>
+        </li>
         <hr class="sidebar-divider">
 
 
