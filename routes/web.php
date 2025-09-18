@@ -62,4 +62,11 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         ->name('admin.orders.index');
     Route::get('/orders/{order}/edit', \App\Livewire\Admin\Order\OrderEditComponent::class)
         ->name('admin.orders.edit');
+
+    Route::get('/users', \App\Livewire\Admin\User\UserIndexComponent::class)
+        ->name('admin.users.index');
+    Route::get('/users/create', \App\Livewire\Admin\User\UserCreateComponent::class)
+        ->name('admin.users.create');
+    Route::get('/users/{user}/edit', \App\Livewire\Admin\User\UserEditComponent::class)
+        ->name('admin.users.edit');
 });

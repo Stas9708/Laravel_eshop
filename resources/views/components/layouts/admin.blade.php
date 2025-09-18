@@ -55,36 +55,42 @@
         <hr class="sidebar-divider my-0">
 
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-            <a class="nav-link" href="{{ route('admin') }}" wire:navigate>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin') }}" wire:navigate wire:current.exact="active">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span></a>
         </li>
-        <li class="nav-item active">
-            <a class="nav-link" href="{{ route('admin.categories.index') }}" wire:navigate>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.categories.index') }}" wire:navigate wire:current="active">
                 <i class="fa-solid fa-bars-staggered"></i>
                 <span>Categories</span></a>
         </li>
-        <li class="nav-item active">
-            <a class="nav-link" href="{{ route('admin.products.index') }}" wire:navigate>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.products.index') }}" wire:navigate wire:current="active">
                 <i class="fa-solid fa-shirt"></i>
                 <span>Products</span></a>
         </li>
         <hr class="sidebar-divider">
-        <li class="nav-item active">
-            <a class="nav-link" href="{{ route('admin.filter-groups.index') }}" wire:navigate>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.filter-groups.index') }}" wire:navigate
+               wire:current.exact="active">
                 <i class="fa-solid fa-filter"></i>
                 <span>Filter groups</span></a>
         </li>
-        <li class="nav-item active">
-            <a class="nav-link" href="{{ route('admin.filters.index') }}" wire:navigate>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.filters.index') }}" wire:navigate wire:current.exact="active">
                 <i class="fa-solid fa-filter"></i>
                 <span>Filters list</span></a>
         </li>
-        <li class="nav-item active">
-            <a class="nav-link" href="{{ route('admin.orders.index') }}" wire:navigate>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.orders.index') }}" wire:navigate wire:current.exact="active">
                 <i class="fa-solid fa-list-ol fa-2x"></i>
-                <span>Order list</span></a>
+                <span>Orders list</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.users.index') }}" wire:navigate wire:current.exact="active">
+                <i class="fa-solid fa-people-group fa-2x"></i>
+                <span>Users list</span></a>
         </li>
         <hr class="sidebar-divider">
 
@@ -126,7 +132,7 @@
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                              aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="{{ route('admin.users.edit', auth()->id()) }}">
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profile
                             </a>
