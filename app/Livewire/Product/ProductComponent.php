@@ -6,13 +6,22 @@ use App\Helpers\Category\Category;
 use App\Helpers\Traits\CartTrait;
 use App\Models\FilterGroup;
 use App\Models\Product;
+use App\Models\Review;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ProductComponent extends Component
 {
-    use CartTrait;
+    use CartTrait, WithPagination;
 
     public string $slug = '';
+    public $activeTab = null;
+
+
+    public function updatingPage()
+    {
+        $this->activeTab = 'reviews';
+    }
 
     public function mount($slug)
     {
@@ -39,12 +48,21 @@ class ProductComponent extends Component
             ->where('filter_products.product_id', '=' ,$product->id)
             ->groupBy('filter_groups.title')
             ->get();
+        $reviews = Review::query()
+            ->where('product_id', '=', $product->id)
+            ->orderByDesc('created_at')
+            ->paginate();
+        $productRating = Review::query()
+            ->where('product_id', '=', $product->id)
+            ->avg('rating');
         return view('livewire.product.product-component', [
             'product' => $product,
             'relatedProducts' => $relatedProducts,
             'breadcrumbs' => $breadcrumbs,
             'attributes' => $attributes,
             'title' => "Product - {$product->title}",
+            'reviews' => $reviews,
+            'productRating' => $productRating,
         ]);
     }
 }

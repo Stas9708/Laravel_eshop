@@ -5,6 +5,12 @@
         <meta name="description" content="{{ $desc ?? '' }}">
     @endsection
 
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -19,6 +25,17 @@
                     </ul>
                 </nav>
             </div>
+            @if($productRating)
+                <div class="row">
+                    <div class="mt-1">
+                        @for ($i = 1; $i <= 5; $i++)
+                            <i class="fa {{ $i <= $productRating ? 'fa-solid fa-star' : 'fa-regular fa-star' }}"
+                               style="color: gold; font-size: 20px;"></i>
+                        @endfor
+                        <span class="ms-2">/ {{ $reviews->total() }} reviews</span>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 
@@ -135,9 +152,11 @@
                 <div class="product-content-details bg-white p-4">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
+                            <button class="nav-link @if($activeTab !== 'reviews') active @endif" id="description-tab"
+                                    data-bs-toggle="tab"
                                     data-bs-target="#description-tab-pane" type="button" role="tab"
-                                    aria-controls="description-tab-pane" aria-selected="true">Description
+                                    aria-controls="description-tab-pane"
+                                    aria-selected="{{ $activeTab !== 'reviews' ? 'true' : 'false' }}">Description
                             </button>
                         </li>
                         @if($attributes->isNotEmpty())
@@ -148,9 +167,20 @@
                                 </button>
                             </li>
                         @endif
+                        @if($reviews->isNotEmpty())
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link @if($activeTab === 'reviews') active @endif" id="reviews-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#reviews-tab-pane" type="button" role="tab"
+                                        aria-controls="reviews-tab-pane"
+                                        aria-selected="{{ $activeTab === 'reviews' ? 'true' : 'false' }}">Reviews
+                                </button>
+                            </li>
+                        @endif
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="description-tab-pane" role="tabpanel"
+                        <div class="tab-pane fade @if($activeTab !== 'reviews') show active @endif"
+                             id="description-tab-pane" role="tabpanel"
                              aria-labelledby="description-tab" tabindex="0">
                             {!! $product->content !!}
                         </div>
@@ -169,6 +199,40 @@
                                 </table>
                             </div>
                         @endif
+                        <div class="tab-pane fade @if($activeTab === 'reviews') show active @endif"
+                             id="reviews-tab-pane" role="tabpanel"
+                             aria-labelledby="reviews-tab" tabindex="0">
+                            <table class="table table-striped table-bordered">
+                                <tbody>
+                                @foreach($reviews as $review)
+                                    <tr wire:key="{{$review->id}}">
+                                        <td style="width: 50%;"><strong>{{ $review->user->name }}</strong></td>
+                                        <td class="text-end">{{ $review->created_at->format('d.m.Y') }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">{{ $review->review }}
+                                            <div class="mt-1">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <i class="fa-{{ $i <= $review->rating ? 'solid fa-star' :
+                                                    'regular fa-star' }}"  style="color: gold;"></i>
+                                                @endfor
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                            @php
+                                $userIds = $reviews->pluck('user_id')->toArray();
+                            @endphp
+
+                            @if(auth()->user() && !in_array(auth()->user()->id, $userIds))
+                                <livewire:product.product-review-create-component product_id="{{ $product->id}}"
+                                product_slug="{{ $product->slug }}">
+                            @endif
+
+                            {{ $reviews->links(data: ['scrollTo' => 'false']) }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -177,23 +241,23 @@
 
     @if(count($relatedProducts))
         <section class="new-products">
-        <div class="container">
-            <div class="row mb-5">
-                <div class="col-12">
-                    <h2 class="section-title">
-                        <span>Related products</span>
-                    </h2>
+            <div class="container">
+                <div class="row mb-5">
+                    <div class="col-12">
+                        <h2 class="section-title">
+                            <span>Related products</span>
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="owl-carousel owl-theme owl-carousel-full" wire:ignore>
+                    @foreach($relatedProducts as $product)
+                        <div wire:key="{{ $product->id }}">
+                            @include('incs.product-card')
+                        </div>
+                    @endforeach
                 </div>
             </div>
-
-            <div class="owl-carousel owl-theme owl-carousel-full" wire:ignore>
-                @foreach($relatedProducts as $product)
-                    <div wire:key="{{ $product->id }}">
-                        @include('incs.product-card')
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
+        </section>
     @endif
 </div>
